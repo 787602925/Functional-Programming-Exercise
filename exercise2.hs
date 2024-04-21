@@ -1,0 +1,61 @@
+-- 1a
+data BinaryTree a = Leaf Bool | Node (BinaryTree a) a (BinaryTree a) deriving Show
+tree1 :: BinaryTree Char
+tree1_left :: BinaryTree Char
+tree1_right :: BinaryTree Char
+tree1_left = Node (Node (Leaf True) 'l' (Leaf False)) 'u' (Node (Leaf True) 'f' (Leaf True))
+tree1_right = Node (Node (Leaf False) 'i' (Leaf False)) '2' (Leaf True)
+tree1 = Node tree1_left 'g' tree1_right  
+-- tree1 = Node (Node (Node (Leaf True) 'l' (Leaf False)) 'u' (Node (Leaf True) 'f' (Leaf True))) 'g' (Node (Node (Leaf False) 'i' (Leaf False)) '2' (Leaf True))
+
+tree2 :: BinaryTree Int
+tree2_left :: BinaryTree Int
+tree2_right :: BinaryTree Int
+tree2_left = Node (Node (Leaf True) 1 (Leaf False)) 2 (Leaf True)
+tree2_right = Node (Node (Leaf False) 6 (Leaf False)) 7 (Node (Leaf True) 9 (Leaf True))
+tree2 = Node tree2_left 4 tree2_right  
+-- tree2 = Node (Node (Node (Leaf True) 1 (Leaf False)) 2 (Leaf True)) 4 (Node (Node (Leaf False) 6 (Leaf False)) 7 (Node (Leaf True) 9 (Leaf True)))
+
+-- 1b
+flattenTree :: BinaryTree a -> [a]
+flattenTree (Leaf _) = []  -- Ignore the Booleans stored in the leaves
+flattenTree (Node left x right) = flattenTree left ++ [x] ++ flattenTree right
+
+-- 1c
+pathsHelper :: BinaryTree a -> [a] -> [[a]]
+pathsHelper (Leaf True) path = [path]  -- Leaf with True value, return the current path
+pathsHelper (Leaf _) _ = []  -- Leaf with False value, discard this path
+pathsHelper (Node left x right) path =
+    let newPath = path ++ [x]
+        leftPaths = pathsHelper left newPath
+        rightPaths = pathsHelper right newPath
+    in leftPaths ++ rightPaths
+
+paths :: BinaryTree a -> [[a]]
+paths tree = pathsHelper tree []
+
+-- 1d
+-- whether a list is sorted in ascending order
+isSorted :: (Ord a) => [a] -> Bool
+isSorted [] = True
+isSorted [_] = True
+isSorted (x:y:xs)
+    | x <= y = isSorted (y:xs)
+    | otherwise = False
+
+-- whether a list is sorted in descending order
+isReverseSorted :: (Ord a) => [a] -> Bool
+isReverseSorted [] = True
+isReverseSorted [_] = True
+isReverseSorted (x:y:xs)
+    | x >= y = isReverseSorted (y:xs)
+    | otherwise = False
+
+-- to judge whether all lists in the list of list is sorted or isReverseSorted
+onlySortedlists :: (Ord a) => [[a]] -> Bool
+onlySortedlists [] = True
+onlySortedlists (x:xs) = (isSorted x || isReverseSorted x) && onlySortedlists(xs)
+
+-- target function
+onlySortedPaths :: (Ord a) => BinaryTree a -> Bool
+onlySortedPaths tree = onlySortedlists (paths tree)

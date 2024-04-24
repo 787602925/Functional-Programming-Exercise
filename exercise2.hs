@@ -87,7 +87,7 @@ instance Ordered Nats where
     lt (Succ m) (Succ n) = lt m n
     gt x y = not (lt x y)
 
---d function sortDec that sorts lists of type [a] in descending order
+--2d function sortDec that sorts lists of type [a] in descending order
 sortDec :: Ordered a => [a] -> [a]
 sortDec [] = []
 sortDec (x:xs) = sortDec [y | y <- xs, gt y x] ++ [x] ++ sortDec [y | y <- xs, lt y x] 

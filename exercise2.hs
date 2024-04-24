@@ -59,3 +59,38 @@ onlySortedlists (x:xs) = (isSorted x || isReverseSorted x) && onlySortedlists(xs
 -- target function
 onlySortedPaths :: (Ord a) => BinaryTree a -> Bool
 onlySortedPaths tree = onlySortedlists (paths tree)
+
+
+-- 2a
+data Nats = Zero | Succ Nats deriving Show
+instance Eq Nats where
+    Zero == Zero = True
+    Zero ==_  = False
+    _  == Zero = False
+    (Succ m) == (Succ n) = m ==  n
+
+--2b declaration for a type class Ordered
+class Eq a => Ordered a where
+    lt :: a -> a -> Bool
+    gt :: a -> a -> Bool
+    gt x y = not (lt x y)
+
+--2c Declare the built-in type Integer and Nats
+data Nats = Zero | Succ Nats deriving Show
+instance Ordered Integer where
+    lt x y = x < y
+    gt x y = x > y
+instance Ordered Nats where
+    lt Zero Zero = False
+    lt Zero _     = True
+    lt _ Zero     = False
+    lt (Succ m) (Succ n) = lt m n
+    gt x y = not (lt x y)
+
+--d function sortDec that sorts lists of type [a] in descending order
+sortDec :: Ordered a => [a] -> [a]
+sortDec [] = []
+sortDec (x:xs) = sortDec [y | y <- xs, gt y x] ++ [x] ++ sortDec [y | y <- xs, lt y x] 
+    where
+        smaller = filter (\y -> lt y x) xs
+        larger = filter (\y -> gt y x) xs

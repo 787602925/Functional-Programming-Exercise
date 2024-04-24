@@ -91,6 +91,3 @@ instance Ordered Nats where
 sortDec :: Ordered a => [a] -> [a]
 sortDec [] = []
 sortDec (x:xs) = sortDec [y | y <- xs, gt y x] ++ [x] ++ sortDec [y | y <- xs, lt y x] 
-    where
-        smaller = filter (\y -> lt y x) xs
-        larger = filter (\y -> gt y x) xs

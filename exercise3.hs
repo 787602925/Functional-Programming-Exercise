@@ -51,7 +51,7 @@ goldbach n
 
 --3b
 range :: [a] -> Int -> Int -> [a]
-range xs m n = [x | (i, x) <- zip [0..] xs, i >= m, i <= n, i < length xs -1]
+range xs m n = [x | (i, x) <- zip [0..] xs, i >= m, i <= n]
 
 -- exercise 4
 zeros :: Rose Int

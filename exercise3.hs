@@ -70,3 +70,12 @@ natsHelper n = Node n [natsHelper (2*n), natsHelper (2*n + 1)]
 -- Define the infinite binary rose tree of natural numbers
 nats :: Rose Int
 nats = natsHelper 1
+
+--4b
+walk :: Rose a -> (a -> [b] -> b) -> b
+walk (Node val children) f = f val (map (flip walk f) children)
+
+--4c
+fromWalk :: ((a -> [Rose a] -> Rose a) -> Rose a) -> Rose a
+--anonymous function is defined to apply f to children recursively
+fromWalk f = f (\val children -> Node val (map (fromWalk f) children))

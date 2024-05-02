@@ -29,3 +29,26 @@ r2 = Node (-2) [Node 5 [Node 16 [], Node 7 []], Node (-9) [Node 1 [], Node 5 []]
 mapAndFold :: (a -> b) -> (b -> b -> b) -> Rose a -> b
 mapAndFold f g (Node x xs) = foldr g (f x) (map (mapAndFold f g) xs)
 
+--3a
+-- Function to drop multiples of a number 
+dropMult :: Int -> [Int] -> [Int]
+dropMult x xs = [y | y <- xs, y `mod` x /= 0]
+
+-- Function to drop all multiples of integers from list
+dropAll :: [Int] -> [Int]
+dropAll (x:xs) = x : dropAll (dropMult x xs)
+
+-- Infinite primes list
+primes :: [Int]
+primes = dropAll [2 ..]
+
+--Goldbach function
+goldbach :: Int -> [(Int, Int)]
+goldbach n
+    | n <= 2 || odd n = []
+    | otherwise = [(x, y) | x <- takeWhile (<= n `div` 2) primes, y <- takeWhile (<= n) primes, x + y == n, x <= y, odd x, odd y]
+    
+
+--3b
+range :: [a] -> Int -> Int -> [a]
+range xs m n = [x | (i, x) <- zip [0..] xs, i >= m, i <= n, i < length xs -1]

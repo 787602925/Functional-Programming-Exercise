@@ -52,3 +52,21 @@ goldbach n
 --3b
 range :: [a] -> Int -> Int -> [a]
 range xs m n = [x | (i, x) <- zip [0..] xs, i >= m, i <= n, i < length xs -1]
+
+-- exercise 4
+zeros :: Rose Int
+zeros = Node 0 [zeros, zeros]
+takeRose :: Int -> Rose a -> Rose a
+takeRose 0 (Node a _ ) = Node a []
+takeRose n (Node a rs) = Node a (map (takeRose (n-1)) rs)
+-- 4a
+mapRose :: (a -> b) -> Rose a -> Rose b
+mapRose f (Node a rs) = Node (f a) (map (mapRose f) rs)
+
+-- Define a helper function to generate natural numbers
+natsHelper :: Int -> Rose Int
+natsHelper n = Node n [natsHelper (2*n), natsHelper (2*n + 1)]
+
+-- Define the infinite binary rose tree of natural numbers
+nats :: Rose Int
+nats = natsHelper 1

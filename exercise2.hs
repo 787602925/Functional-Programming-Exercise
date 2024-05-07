@@ -76,7 +76,7 @@ class Eq a => Ordered a where
     gt x y = not (lt x y)
 
 --2c Declare the built-in type Integer and Nats
-data Nats = Zero | Succ Nats deriving Show
+-- data Nats = Zero | Succ Nats deriving Show
 instance Ordered Integer where
     lt x y = x < y
     gt x y = x > y
